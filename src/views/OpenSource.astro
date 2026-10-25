@@ -1,0 +1,91 @@
+---
+import type { Locale } from "../lib/locale";
+import catalog from "../generated/repos.json";
+import Layout from "../layouts/Layout.astro";
+import { useI18n } from "../i18n";
+import { fill } from "../lib/text";
+
+interface RepoEntry {
+  name: string;
+  description: string | null;
+  url: string;
+  homepage: string | null;
+  language: string | null;
+  stars: number;
+  pushedAt: string;
+  fork: boolean;
+  topics: string[];
+}
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useI18n(locale);
+const repos = catalog.repos as RepoEntry[];
+const updated = new Intl.DateTimeFormat(locale === "fr" ? "fr-FR" : "en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+}).format(new Date(catalog.generatedAt));
+
+function safeHttp(value: string | null): string | null {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+---
+
+<Layout locale={locale} route="oss" title={t.oss.metaTitle} description={t.oss.metaDescription}>
+  <header class="page-head">
+    <p class="kicker">{t.oss.kicker}</p>
+    <h1 class="page-title">{t.oss.title}</h1>
+    <p class="lede">{t.oss.lede}</p>
+    <p class="note">{fill(t.oss.updated, { date: updated })}</p>
+  </header>
+  {
+    repos.length === 0 ? (
+      <p>{t.oss.empty}</p>
+    ) : (
+      <ul class="repos">
+        {repos.map((repo) => {
+          const home = safeHttp(repo.homepage);
+          const stars = repo.stars === 1 ? t.oss.starsOne : fill(t.oss.starsMany, { count: repo.stars });
+          return (
+            <li class="repo">
+              <div class="repo-head">
+                <h2 class="repo-name">
+                  <a href={repo.url}>
+                    {repo.name}
+                    <span class="visually-hidden"> {t.oss.onGitHub}</span>
+                  </a>
+                </h2>
+              </div>
+              <p class="repo-meta">
+                <span>{repo.language ?? t.oss.noLanguage}</span>
+                <span>{stars}</span>
+                <time datetime={repo.pushedAt}>
+                  {new Intl.DateTimeFormat(locale === "fr" ? "fr-FR" : "en-GB", { dateStyle: "medium" }).format(new Date(repo.pushedAt))}
+                </time>
+                {repo.fork && <span>{t.oss.fork}</span>}
+                {home && (
+                  <a href={home}>{t.oss.site}</a>
+                )}
+              </p>
+              <p class="repo-description">{repo.description?.trim() || t.oss.noDescription}</p>
+              {repo.topics.length > 0 && <p class="repo-meta">{repo.topics.join(" · ")}</p>}
+            </li>
+          );
+        })}
+      </ul>
+    )
+  }
+  <section class="close">
+    <p>{t.oss.end}</p>
+  </section>
+</Layout>

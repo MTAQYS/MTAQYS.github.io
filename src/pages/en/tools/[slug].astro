@@ -1,0 +1,12 @@
+---
+import { tools } from "../../../data/tools";
+import ToolDetail from "../../../views/ToolDetail.astro";
+
+export function getStaticPaths() {
+  return tools.map((tool) => ({ params: { slug: tool.slug } }));
+}
+
+const { slug } = Astro.params;
+if (!slug) throw new Error("Missing tool slug");
+---
+<ToolDetail locale="en" slug={slug} />

@@ -1,0 +1,124 @@
+---
+import type { Locale } from "../lib/locale";
+import { offers, dailyRateEur, supportMonthlyEur } from "../data/offers";
+import Layout from "../layouts/Layout.astro";
+import { useI18n } from "../i18n";
+import { href } from "../lib/href";
+import { formatMadFromEur, formatMoney } from "../lib/pricing";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useI18n(locale);
+---
+
+<Layout locale={locale} route="services" title={t.services.metaTitle} description={t.services.metaDescription}>
+  <header class="page-head">
+    <p class="kicker">{t.services.kicker}</p>
+    <h1 class="page-title">{t.services.title}</h1>
+    <p class="lede">{t.services.lede}</p>
+  </header>
+
+  <section class="section">
+    {
+      offers.map((offer, index) => {
+        const copy = t.services.offers[offer.id];
+        return (
+          <article class="offer" id={offer.id}>
+            <p class="num">{String(index + 1).padStart(2, "0")}</p>
+            <div>
+              <h2>
+                {copy.name}
+                <span>{copy.title}</span>
+              </h2>
+              <p>{copy.text}</p>
+            </div>
+            <p class="price">
+              <span class="from">{t.services.from}</span>
+              <span class="figure">{formatMoney(locale, offer.fromEur, "EUR")}</span>
+              <span class="tax">{t.services.excl}</span>
+              <span class="mad">~ {formatMadFromEur(locale, offer.fromEur)}</span>
+            </p>
+          </article>
+        );
+      })
+    }
+    <p class="note">{t.services.rateNote}</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>{t.services.extrasTitle}</h2>
+    </div>
+    <div class="extras">
+      <article>
+        <h3>{t.services.diagnosticTitle}</h3>
+        <p>{t.services.diagnosticText}</p>
+      </article>
+      <article>
+        <h3>{t.services.dailyTitle}</h3>
+        <p>{t.services.dailyText}</p>
+        <p class="price start">
+          <span class="figure">{formatMoney(locale, dailyRateEur, "EUR")}</span>
+          <span class="tax">{t.services.excl}</span>
+          <span class="mad">~ {formatMadFromEur(locale, dailyRateEur)}</span>
+        </p>
+      </article>
+      <article>
+        <h3 lang="fr">{t.services.supportTitle}</h3>
+        <p>{t.services.supportText}</p>
+        <p class="price start">
+          <span class="from">{t.services.from}</span>
+          <span class="figure">{formatMoney(locale, supportMonthlyEur, "EUR")}</span>
+          <span class="tax">{t.services.excl} · {t.services.perMonth}</span>
+          <span class="mad">~ {formatMadFromEur(locale, supportMonthlyEur)}</span>
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="process">
+    <div class="section-head">
+      <h2>{t.services.processTitle}</h2>
+      <p>{t.services.processLede}</p>
+    </div>
+    <ol class="process-list">
+      {
+        t.services.steps.map((step, index) => (
+          <li>
+            <p class="num">{String(index + 1).padStart(2, "0")}</p>
+            <div>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="section" id="commitments">
+    <div class="section-head">
+      <h2>{t.services.commitmentsTitle}</h2>
+      <p>{t.services.commitmentsLede}</p>
+    </div>
+    {
+      t.services.commitments.map((item, index) => (
+        <article class="split">
+          <p class="num">{String(index + 1).padStart(2, "0")}</p>
+          <div>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </div>
+        </article>
+      ))
+    }
+  </section>
+
+  <section class="close">
+    <h2>{t.services.closeTitle}</h2>
+    <p>{t.services.closeText}</p>
+    <p><a class="button" href={href(locale, "contact")}>{t.services.closeCta}</a></p>
+  </section>
+</Layout>

@@ -1,0 +1,257 @@
+---
+import type { Locale } from "../lib/locale";
+import {
+  budgetIds,
+  constraintIds,
+  heardIds,
+  limits,
+  projectTypeIds,
+  timelineIds,
+} from "../lib/brief/model";
+import { useI18n } from "../i18n";
+import { fill } from "../lib/text";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useI18n(locale).contact;
+const total = t.steps.length;
+---
+
+<div data-brief-root>
+  <p class="form-fallback" data-form-fallback>
+    {t.jsNeeded}
+  </p>
+  <form class="brief-form" hidden novalidate>
+    <p class="required-note">{t.requiredNote}</p>
+    <p class="step-kicker" data-step-kicker>{fill(t.progress, { current: 1, total })}</p>
+    <div
+      class="progress"
+      data-progress
+      role="progressbar"
+      aria-valuemin="1"
+      aria-valuemax={total}
+      aria-valuenow="1"
+      aria-valuetext={fill(t.progress, { current: 1, total })}
+    >
+      <span class="progress-fill" data-progress-fill style="width: 16.6%"></span>
+    </div>
+    <ol class="step-index">
+      {
+        t.steps.map((step, index) => (
+          <li>
+            <button type="button" data-goto={step.id} disabled={index > 0} aria-current={index === 0 ? "step" : undefined}>
+              <span class="step-num">{String(index + 1).padStart(2, "0")}</span>
+              <span class="step-label">{step.label}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ol>
+
+    <section class="step" data-step="identity">
+      <h2 tabindex="-1">{t.steps[0].title}</h2>
+      <p class="step-lede">{t.steps[0].lede}</p>
+      <p class="step-alert" data-step-error hidden></p>
+      <div class="field">
+        <label for="brief-name">{t.fields.name}</label>
+        <input id="brief-name" name="name" data-field="name" type="text" autocomplete="name" maxlength={limits.name} aria-describedby="error-name" />
+        <p class="field-error" id="error-name" data-error-for="name" hidden></p>
+      </div>
+      <div class="field">
+        <label for="brief-email">{t.fields.email}</label>
+        <input id="brief-email" name="email" data-field="email" type="email" autocomplete="email" inputmode="email" maxlength={limits.email} aria-describedby="error-email" />
+        <p class="field-error" id="error-email" data-error-for="email" hidden></p>
+      </div>
+      <div class="field">
+        <label for="brief-role">{t.fields.role} <span class="hint">{t.optional}</span></label>
+        <input id="brief-role" name="role" type="text" autocomplete="organization-title" maxlength={limits.role} />
+      </div>
+      <div class="field">
+        <label for="brief-company">{t.fields.company} <span class="hint">{t.optional}</span></label>
+        <input id="brief-company" name="company" type="text" autocomplete="organization" maxlength={limits.company} />
+      </div>
+      <div class="field">
+        <label for="brief-website">{t.fields.website} <span class="hint">{t.optional}</span></label>
+        <input id="brief-website" name="website" data-field="website" type="text" inputmode="url" autocomplete="url" maxlength={limits.website} aria-describedby="hint-website error-website" />
+        <p class="hint" id="hint-website">{t.hints.website}</p>
+        <p class="field-error" id="error-website" data-error-for="website" hidden></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="button" data-next>{t.actions.next}</button>
+        <button type="button" class="linkish" data-clear>{t.clear}</button>
+      </div>
+    </section>
+
+    <section class="step" data-step="project" hidden>
+      <h2 tabindex="-1">{t.steps[1].title}</h2>
+      <p class="step-lede">{t.steps[1].lede}</p>
+      <p class="step-alert" data-step-error hidden></p>
+      <fieldset class="field" data-field="projectType" aria-describedby="error-projectType">
+        <legend>{t.fields.projectType}</legend>
+        {
+          projectTypeIds.map((id) => (
+            <label class="choice">
+              <input type="radio" name="projectType" value={id} />
+              <span>{t.projectTypes[id]}</span>
+            </label>
+          ))
+        }
+        <p class="field-error" id="error-projectType" data-error-for="projectType" hidden></p>
+      </fieldset>
+      <div class="field">
+        <label for="brief-goal">{t.fields.goal}</label>
+        <textarea id="brief-goal" name="goal" data-field="goal" maxlength={limits.goal} aria-describedby="hint-goal error-goal"></textarea>
+        <p class="hint" id="hint-goal">{t.hints.goal}</p>
+        <p class="field-error" id="error-goal" data-error-for="goal" hidden></p>
+      </div>
+      <div class="field">
+        <label for="brief-success">{t.fields.success} <span class="hint">{t.optional}</span></label>
+        <textarea id="brief-success" name="success" maxlength={limits.success}></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="button secondary" data-back>{t.actions.back}</button>
+        <button type="button" class="button" data-next>{t.actions.next}</button>
+      </div>
+    </section>
+
+    <section class="step" data-step="situation" hidden>
+      <h2 tabindex="-1">{t.steps[2].title}</h2>
+      <p class="step-lede">{t.steps[2].lede}</p>
+      <p class="step-alert" data-step-error hidden></p>
+      <div class="field">
+        <label for="brief-situation">{t.fields.situation}</label>
+        <textarea id="brief-situation" name="situation" data-field="situation" maxlength={limits.situation} aria-describedby="hint-situation error-situation"></textarea>
+        <p class="hint" id="hint-situation">{t.hints.situation}</p>
+        <p class="field-error" id="error-situation" data-error-for="situation" hidden></p>
+      </div>
+      <div class="field">
+        <label for="brief-blockers">{t.fields.blockers} <span class="hint">{t.optional}</span></label>
+        <textarea id="brief-blockers" name="blockers" maxlength={limits.blockers}></textarea>
+      </div>
+      <div class="field">
+        <label for="brief-users">{t.fields.users} <span class="hint">{t.optional}</span></label>
+        <input id="brief-users" name="users" type="text" maxlength={limits.users} />
+      </div>
+      <fieldset class="field">
+        <legend>{t.fields.constraints} <span class="hint">{t.optional}</span></legend>
+        {
+          constraintIds.map((id) => (
+            <label class="choice">
+              <input type="checkbox" name="constraints" value={id} />
+              <span>{t.constraints[id]}</span>
+            </label>
+          ))
+        }
+      </fieldset>
+      <div class="field">
+        <label for="brief-constraint-note">{t.fields.constraintNote} <span class="hint">{t.optional}</span></label>
+        <textarea id="brief-constraint-note" name="constraintNote" maxlength={limits.constraintNote}></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="button secondary" data-back>{t.actions.back}</button>
+        <button type="button" class="button" data-next>{t.actions.next}</button>
+      </div>
+    </section>
+
+    <section class="step" data-step="frame" hidden>
+      <h2 tabindex="-1">{t.steps[3].title}</h2>
+      <p class="step-lede">{t.steps[3].lede}</p>
+      <p class="step-alert" data-step-error hidden></p>
+      <div class="field">
+        <label for="brief-budget">{t.fields.budget}</label>
+        <select id="brief-budget" name="budget" data-field="budget" aria-describedby="hint-budget error-budget">
+          <option value="">{t.choose}</option>
+          {budgetIds.map((id) => <option value={id}>{t.budgets[id]}</option>)}
+        </select>
+        <p class="hint" id="hint-budget">{t.hints.budget}</p>
+        <p class="field-error" id="error-budget" data-error-for="budget" hidden></p>
+      </div>
+      <div class="field">
+        <label for="brief-timeline">{t.fields.timeline}</label>
+        <select id="brief-timeline" name="timeline" data-field="timeline" aria-describedby="error-timeline">
+          <option value="">{t.choose}</option>
+          {timelineIds.map((id) => <option value={id}>{t.timelines[id]}</option>)}
+        </select>
+        <p class="field-error" id="error-timeline" data-error-for="timeline" hidden></p>
+      </div>
+      <div class="field">
+        <label for="brief-due">{t.fields.dueDate} <span class="hint">{t.optional}</span></label>
+        <input id="brief-due" name="dueDate" type="date" />
+      </div>
+      <div class="field">
+        <label for="brief-heard">{t.fields.heard}</label>
+        <select id="brief-heard" name="heard" data-field="heard" aria-describedby="error-heard">
+          <option value="">{t.choose}</option>
+          {heardIds.map((id) => <option value={id}>{t.heard[id]}</option>)}
+        </select>
+        <p class="field-error" id="error-heard" data-error-for="heard" hidden></p>
+      </div>
+      <div class="field">
+        <label for="brief-heard-detail">{t.fields.heardDetail} <span class="hint">{t.optional}</span></label>
+        <input id="brief-heard-detail" name="heardDetail" type="text" maxlength={limits.heardDetail} />
+      </div>
+      <fieldset class="field">
+        <legend>{t.fields.hasSpec} <span class="hint">{t.optional}</span></legend>
+        <label class="choice"><input type="radio" name="hasSpec" value="yes" /> <span>{t.yes}</span></label>
+        <label class="choice"><input type="radio" name="hasSpec" value="no" /> <span>{t.no}</span></label>
+      </fieldset>
+      <div class="form-actions">
+        <button type="button" class="button secondary" data-back>{t.actions.back}</button>
+        <button type="button" class="button" data-next>{t.actions.next}</button>
+      </div>
+    </section>
+
+    <section class="step" data-step="details" hidden>
+      <h2 tabindex="-1">{t.steps[4].title}</h2>
+      <p class="step-lede">{t.steps[4].lede}</p>
+      <p class="step-alert" data-step-error hidden></p>
+      <div class="field">
+        <label for="brief-details">{t.fields.details}</label>
+        <textarea id="brief-details" name="details" data-field="details" maxlength={limits.details} aria-describedby="hint-details error-details"></textarea>
+        <p class="hint" id="hint-details">{t.hints.details}</p>
+        <p class="field-error" id="error-details" data-error-for="details" hidden></p>
+      </div>
+      <div class="field">
+        <label for="brief-links">{t.fields.links} <span class="hint">{t.optional}</span></label>
+        <textarea id="brief-links" name="links" maxlength={limits.links}></textarea>
+      </div>
+      <div class="field">
+        <label for="brief-out">{t.fields.outOfScope} <span class="hint">{t.optional}</span></label>
+        <textarea id="brief-out" name="outOfScope" maxlength={limits.outOfScope}></textarea>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="button secondary" data-back>{t.actions.back}</button>
+        <button type="button" class="button" data-next>{t.actions.next}</button>
+      </div>
+    </section>
+
+    <section class="step" data-step="review" hidden>
+      <h2 tabindex="-1">{t.steps[5].title}</h2>
+      <p class="step-lede">{t.steps[5].lede}</p>
+      <p class="step-alert" data-step-error hidden></p>
+      <p>{t.reviewIntro}</p>
+      <div data-review></div>
+      <div class="field">
+        <label class="choice">
+          <input type="checkbox" name="consent" data-field="consent" aria-describedby="error-consent" />
+          <span>{t.consent}</span>
+        </label>
+        <p class="field-error" id="error-consent" data-error-for="consent" hidden></p>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="button secondary" data-back>{t.actions.back}</button>
+        <button type="submit" class="button">{t.actions.submit}</button>
+        <button type="button" class="button secondary" data-copy>{t.actions.copy}</button>
+      </div>
+      <p class="form-status" data-status role="status"></p>
+      <textarea class="plain-copy" data-plain hidden readonly></textarea>
+    </section>
+  </form>
+  <script>
+    import { initBriefForm } from "../scripts/brief-form";
+    document.querySelectorAll<HTMLElement>("[data-brief-root]").forEach((root) => initBriefForm(root));
+  </script>
+</div>

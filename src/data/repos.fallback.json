@@ -1,0 +1,84 @@
+{
+  "generatedAt": "2026-10-25T23:42:28.908Z",
+  "source": "github",
+  "org": "MTAQYS",
+  "repos": [
+    {
+      "name": "Convert",
+      "description": null,
+      "url": "https://github.com/MTAQYS/Convert",
+      "homepage": null,
+      "language": null,
+      "stars": 0,
+      "pushedAt": "2026-10-25T23:40:53Z",
+      "fork": false,
+      "topics": []
+    },
+    {
+      "name": "Wheel",
+      "description": null,
+      "url": "https://github.com/MTAQYS/Wheel",
+      "homepage": null,
+      "language": "TypeScript",
+      "stars": 0,
+      "pushedAt": "2026-10-25T23:36:14Z",
+      "fork": false,
+      "topics": []
+    },
+    {
+      "name": "Qr",
+      "description": null,
+      "url": "https://github.com/MTAQYS/Qr",
+      "homepage": null,
+      "language": null,
+      "stars": 0,
+      "pushedAt": "2026-10-25T23:11:59Z",
+      "fork": false,
+      "topics": []
+    },
+    {
+      "name": "MTAQYS.github.io",
+      "description": null,
+      "url": "https://github.com/MTAQYS/MTAQYS.github.io",
+      "homepage": null,
+      "language": null,
+      "stars": 0,
+      "pushedAt": "2026-10-25T23:11:39Z",
+      "fork": false,
+      "topics": []
+    },
+    {
+      "name": "dynamogic",
+      "description": "Dynamogic — Brand Layer for AI output. Spec, copy, atomic tasks, and AI build prompts. Source of truth for Cursor/Claude.",
+      "url": "https://github.com/MTAQYS/dynamogic",
+      "homepage": null,
+      "language": "TypeScript",
+      "stars": 0,
+      "pushedAt": "2026-09-12T13:20:47Z",
+      "fork": false,
+      "topics": []
+    },
+    {
+      "name": "docs",
+      "description": "Dynamogic Docs — Markdown in, clean branded PDF out. Suite product #3.",
+      "url": "https://github.com/MTAQYS/docs",
+      "homepage": "https://mtaqys.github.io/docs/",
+      "language": "TypeScript",
+      "stars": 0,
+      "pushedAt": "2026-09-12T13:00:11Z",
+      "fork": false,
+      "topics": []
+    },
+    {
+      "name": "bepro",
+      "description": "BePro — CV builder in the Dynamogic suite. Free build/export; Pro unlocks AI assist.",
+      "url": "https://github.com/MTAQYS/bepro",
+      "homepage": "https://mtaqys.github.io/bepro/",
+      "language": "TypeScript",
+      "stars": 0,
+      "pushedAt": "2026-09-12T12:05:52Z",
+      "fork": false,
+      "topics": []
+    }
+  ]
+}

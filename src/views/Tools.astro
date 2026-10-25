@@ -1,0 +1,48 @@
+---
+import type { Locale } from "../lib/locale";
+import { toolCopy, tools } from "../data/tools";
+import Layout from "../layouts/Layout.astro";
+import { useI18n } from "../i18n";
+import { href } from "../lib/href";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useI18n(locale);
+---
+
+<Layout locale={locale} route="tools" title={t.tools.metaTitle} description={t.tools.metaDescription}>
+  <header class="page-head">
+    <p class="kicker">{t.tools.kicker}</p>
+    <h1 class="page-title">{t.tools.title}</h1>
+    <p class="lede">{t.tools.lede}</p>
+  </header>
+  <ul class="catalog">
+    {
+      tools.map((tool) => {
+        const copy = toolCopy(tool, locale);
+        return (
+          <li>
+            <a class="catalog-link" href={href(locale, "tools", tool.slug)}>
+              <span class="catalog-top">
+                <span class="catalog-name" lang="en" translate="no">
+                  {tool.name}
+                </span>
+                <span class:list={["status", `status-${tool.status}`]}>
+                  <span class="status-mark" aria-hidden="true" />
+                  {t.tools.status[tool.status]}
+                </span>
+              </span>
+              <span class="catalog-summary">{copy.summary}</span>
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+  <section class="close">
+    <p>{t.tools.end}</p>
+    <p><a class="text-link" href={href(locale, "contact")}>{t.tools.endCta} <span aria-hidden="true">→</span></a></p>
+  </section>
+</Layout>

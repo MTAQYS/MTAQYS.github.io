@@ -1,0 +1,60 @@
+---
+import type { Locale, RouteKey } from "../lib/locale";
+import { href } from "../lib/href";
+import { site, mailtoHref } from "../lib/site";
+import { useI18n } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  route?: RouteKey;
+  tagged?: boolean;
+}
+
+const { locale, route, tagged = false } = Astro.props;
+const t = useI18n(locale);
+const year = new Date().getFullYear();
+const pages = [
+  ["vision", t.nav.vision],
+  ["services", t.nav.services],
+  ["tools", t.nav.tools],
+  ["oss", t.nav.oss],
+  ["contact", t.nav.contact],
+] as const;
+---
+
+<div data-nf-lang={tagged ? locale : undefined}>
+  <div class="page footer-grid">
+    <div>
+      <p class="wordmark" translate="no">Dynamogic</p>
+      <p class="footer-blurb">{t.footer.blurb}</p>
+      <a class="footer-email" href={mailtoHref}>{site.email}</a>
+    </div>
+    <nav aria-label={t.footer.pages}>
+      <ul class="footer-list">
+        {
+          pages.map(([key, label]) => (
+            <li>
+              <a href={href(locale, key)} aria-current={route === key ? "page" : undefined}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <nav aria-label={t.footer.legal}>
+      <ul class="footer-list">
+        <li><a href={href(locale, "legal")}>{t.legal.title}</a></li>
+        <li><a href={href(locale, "privacy")}>{t.privacy.title}</a></li>
+        <li>
+          {t.footer.licenseLead}{" "}
+          <a href={site.licenseUrl} rel="license">{t.footer.licenseName}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="page footer-end">
+    <p>© {year} Dynamogic</p>
+    <p translate="no">{t.footer.colophon}</p>
+  </div>
+</div>

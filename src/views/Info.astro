@@ -1,0 +1,38 @@
+---
+import type { Locale, RouteKey } from "../lib/locale";
+import Layout from "../layouts/Layout.astro";
+import { useI18n } from "../i18n";
+import { mailtoHref, site } from "../lib/site";
+
+interface Props {
+  locale: Locale;
+  page: "legal" | "privacy";
+}
+const { locale, page } = Astro.props;
+const t = useI18n(locale);
+const content = page === "legal" ? t.legal : t.privacy;
+const route: RouteKey = page === "legal" ? "legal" : "privacy";
+---
+
+<Layout locale={locale} route={route} title={content.metaTitle} description={content.metaDescription}>
+  <header class="page-head">
+    <p class="kicker">{content.kicker}</p>
+    <h1 class="page-title">{content.title}</h1>
+    <p class="dated">{content.updated}</p>
+  </header>
+  <div class="plain">
+    {
+      content.sections.map((section) => (
+        <section>
+          <h2>{section.heading}</h2>
+          {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+          {section.showEmail && (
+            <p>
+              <a href={mailtoHref}>{site.email}</a>
+            </p>
+          )}
+        </section>
+      ))
+    }
+  </div>
+</Layout>
