@@ -1,0 +1,65 @@
+---
+import type { Locale, RouteKey } from "../lib/locale";
+import { href } from "../lib/href";
+import { useI18n } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  route?: RouteKey;
+  slug?: string;
+  tagged?: boolean;
+}
+
+const { locale, route, slug, tagged = false } = Astro.props;
+const t = useI18n(locale);
+const items = [
+  ["vision", t.nav.vision],
+  ["services", t.nav.services],
+  ["tools", t.nav.tools],
+  ["oss", t.nav.oss],
+  ["contact", t.nav.contact],
+] as const;
+const switchRoute = route ?? "home";
+---
+
+<div class="page header-bar" data-nf-lang={tagged ? locale : undefined}>
+  <a class="wordmark" href={href(locale, "home")} translate="no">Dynamogic</a>
+  <div class="header-tools">
+    <nav class="lang-switch" aria-label={t.nav.language}>
+      <a href={href("fr", switchRoute, slug)} hreflang="fr" lang="fr" aria-current={locale === "fr" ? "true" : undefined}>FR</a>
+      <span aria-hidden="true">/</span>
+      <a href={href("en", switchRoute, slug)} hreflang="en" lang="en" aria-current={locale === "en" ? "true" : undefined}>EN</a>
+    </nav>
+    <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
+      <span class="visually-hidden">{t.nav.theme}</span>
+      <span class="when-light">{t.nav.themeToDark}</span>
+      <span class="when-dark">{t.nav.themeToLight}</span>
+    </button>
+    <button
+      type="button"
+      class="menu-toggle"
+      data-menu
+      data-label-open={t.nav.menu}
+      data-label-close={t.nav.close}
+      aria-expanded="false"
+      aria-controls={`site-nav-${locale}`}
+    >
+      {t.nav.menu}
+    </button>
+  </div>
+  <div class="nav-panel" id={`site-nav-${locale}`}>
+    <nav aria-label={t.nav.pages}>
+      <ul class="nav-list">
+        {
+          items.map(([key, label]) => (
+            <li>
+              <a href={href(locale, key)} aria-current={route === key ? "page" : undefined}>
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</div>

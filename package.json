@@ -1,0 +1,43 @@
+{
+  "name": "dynamogic-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dynamogic studio website — French and English static site.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "repos": "node scripts/fetch-repos.mjs",
+    "predev": "node scripts/fetch-repos.mjs",
+    "dev": "astro dev",
+    "prebuild": "node scripts/fetch-repos.mjs",
+    "build": "astro build",
+    "postbuild": "node scripts/check-site.mjs",
+    "preview": "astro preview --host 127.0.0.1",
+    "precheck": "node scripts/fetch-repos.mjs",
+    "check": "astro check",
+    "lint": "eslint .",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "assets": "node scripts/render-brand.mjs",
+    "verify": "npm run lint && npm run test && npm run check && npm run build"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/source-sans-3": "^5.3.1",
+    "@fontsource-variable/source-serif-4": "^5.3.1",
+    "@fontsource/source-code-pro": "^5.3.1",
+    "astro": "^7.4.2",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@resvg/resvg-js": "^2.6.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "globals": "^17.13.0",
+    "tsx": "^4.23.15",
+    "typescript-eslint": "^8.72.0"
+  }
+}

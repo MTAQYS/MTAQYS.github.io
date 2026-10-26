@@ -1,0 +1,61 @@
+---
+import type { Locale } from "../lib/locale";
+import Layout from "../layouts/Layout.astro";
+import { useI18n } from "../i18n";
+import { href } from "../lib/href";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useI18n(locale);
+const quoteAt = 3;
+---
+
+<Layout locale={locale} route="vision" title={t.vision.metaTitle} description={t.vision.metaDescription}>
+  <header class="page-head">
+    <p class="kicker">{t.vision.kicker}</p>
+    <h1 class="page-title">{t.vision.title}</h1>
+    <p class="lede">{t.vision.lede}</p>
+  </header>
+  <div class="section essay">
+    {
+      t.vision.beliefs.map((belief, index) => (
+        <>
+          {index === quoteAt && (
+            <blockquote class="quote">
+              <p>{t.vision.quote}</p>
+            </blockquote>
+          )}
+          <article class="split">
+            <p class="num">{String(index + 1).padStart(2, "0")}</p>
+            <div>
+              <h2>{belief.title}</h2>
+              <p>{belief.text}</p>
+            </div>
+          </article>
+        </>
+      ))
+    }
+  </div>
+  <section class="section">
+    <div class="section-head">
+      <h2>{t.vision.principlesTitle}</h2>
+      <p>{t.vision.principlesLede}</p>
+    </div>
+    <div class="principles">
+      {
+        t.vision.principles.map((principle) => (
+          <article>
+            <h3>{principle.title}</h3>
+            <p>{principle.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+  <section class="close">
+    <p>{t.vision.close}</p>
+    <p><a class="text-link" href={href(locale, "contact")}>{t.vision.closeCta} <span aria-hidden="true">→</span></a></p>
+  </section>
+</Layout>

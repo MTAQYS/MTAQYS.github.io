@@ -1,0 +1,24 @@
+---
+import type { Locale } from "../lib/locale";
+import BriefForm from "../components/BriefForm.astro";
+import Layout from "../layouts/Layout.astro";
+import { useI18n } from "../i18n";
+import { mailtoHref, site } from "../lib/site";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useI18n(locale);
+---
+
+<Layout locale={locale} route="contact" title={t.contact.metaTitle} description={t.contact.metaDescription}>
+  <header class="page-head">
+    <p class="kicker">{t.contact.kicker}</p>
+    <h1 class="page-title">{t.contact.title}</h1>
+    <p class="lede">{t.contact.lede}</p>
+    <p class="note">{t.contact.emailNote}</p>
+    <p class="email-display"><a href={mailtoHref}>{site.email}</a></p>
+  </header>
+  <BriefForm locale={locale} />
+</Layout>

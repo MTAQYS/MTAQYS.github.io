@@ -1,0 +1,55 @@
+---
+import type { Locale } from "../lib/locale";
+import { getTool, toolCopy } from "../data/tools";
+import Layout from "../layouts/Layout.astro";
+import { useI18n } from "../i18n";
+import { href } from "../lib/href";
+import { fill } from "../lib/text";
+
+interface Props {
+  locale: Locale;
+  slug: string;
+}
+const { locale, slug } = Astro.props;
+const tool = getTool(slug);
+if (!tool) throw new Error(`Unknown tool: ${slug}`);
+const t = useI18n(locale);
+const copy = toolCopy(tool, locale);
+const title = fill(t.tools.detailTitle, { name: tool.name });
+const description = copy.summary;
+---
+
+<Layout locale={locale} route="tools" slug={slug} title={title} description={description}>
+  <nav class="breadcrumb" aria-label={t.tools.breadcrumb}>
+    <a href={href(locale, "tools")}>{t.tools.back}</a>
+    <span aria-hidden="true">/</span>
+    <span aria-current="page" lang="en" translate="no">{tool.name}</span>
+  </nav>
+  <header class="page-head">
+    <p class="kicker">{t.tools.kicker}</p>
+    <h1 class="page-title" lang="en" translate="no">{tool.name}</h1>
+    <p class:list={["status", `status-${tool.status}`]}>
+      <span class="status-mark" aria-hidden="true"></span>
+      {t.tools.status[tool.status]}
+    </p>
+    <p class="lede">{copy.summary}</p>
+  </header>
+  <div class="plain section">
+    {copy.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+  </div>
+  <section class="section">
+    <h2>{t.tools.pointsTitle}</h2>
+    <ul class="points">
+      {copy.points.map((point) => <li>{point}</li>)}
+    </ul>
+    <div class="detail-actions">
+      {
+        tool.url ? (
+          <a class="button" href={tool.url}>{fill(t.tools.open, { name: tool.name })}</a>
+        ) : (
+          <p>{t.tools.soonNote}</p>
+        )
+      }
+    </div>
+  </section>
+</Layout>

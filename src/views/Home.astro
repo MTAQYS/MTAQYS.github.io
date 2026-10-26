@@ -1,0 +1,80 @@
+---
+import type { Locale } from "../lib/locale";
+import Layout from "../layouts/Layout.astro";
+import { useI18n } from "../i18n";
+import { href } from "../lib/href";
+import { site } from "../lib/site";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const t = useI18n(locale);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: site.name,
+  url: "https://mtaqys.github.io/",
+  email: site.email,
+  description: t.home.metaDescription,
+  areaServed: "Worldwide",
+  availableLanguage: ["French", "English"],
+  currenciesAccepted: "EUR",
+  sameAs: [site.githubUrl],
+};
+---
+
+<Layout locale={locale} route="home" title={t.home.metaTitle} description={t.home.metaDescription} jsonLd={jsonLd}>
+  <section class="hero">
+    <p class="kicker">{t.home.kicker}</p>
+    <h1>{t.home.title}</h1>
+    <p class="lede">{t.home.lede}</p>
+    <p class="hero-action"><a class="text-link" href={href(locale, "contact")}>{t.home.cta} <span aria-hidden="true">→</span></a></p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>{t.home.nameTitle}</h2>
+      <p>{t.home.nameLede}</p>
+    </div>
+    <div class="triad">
+      {
+        t.home.parts.map((part, index) => (
+          <article>
+            <p class="num">{String(index + 1).padStart(2, "0")}</p>
+            <h3 lang="en">{part.title}</h3>
+            <p>{part.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2>{t.home.valueTitle}</h2>
+    </div>
+    {
+      t.home.values.map((value, index) => (
+        <article class="split">
+          <p class="num">{String(index + 1).padStart(2, "0")}</p>
+          <div>
+            <h3>{value.title}</h3>
+            <p>{value.text}</p>
+          </div>
+        </article>
+      ))
+    }
+    <p class="next-links">
+      <a href={href(locale, "services")}>{t.home.moreOffers}</a>
+      <a href={href(locale, "tools")}>{t.home.moreTools}</a>
+      <a href={href(locale, "oss")}>{t.home.moreCode}</a>
+    </p>
+  </section>
+
+  <section class="close">
+    <h2>{t.home.closeTitle}</h2>
+    <p>{t.home.closeText}</p>
+    <p><a class="button" href={href(locale, "contact")}>{t.home.cta}</a></p>
+  </section>
+</Layout>

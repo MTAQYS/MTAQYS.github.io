@@ -1,0 +1,37 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { dictionary } from "../i18n";
+import { href } from "../lib/href";
+
+const fr = dictionary.fr.notFound;
+const en = dictionary.en.notFound;
+---
+
+<Layout
+  locale="fr"
+  title={fr.metaTitle}
+  description={fr.text}
+  noindex={true}
+  notFound={true}
+>
+  <article data-nf-lang="fr" lang="fr">
+    <p class="kicker">{fr.kicker}</p>
+    <h1 class="page-title">{fr.title}</h1>
+    <p class="lede">{fr.text}</p>
+    <p class="next-links">
+      <a href={href("fr", "home")}>{fr.home}</a>
+      <a href={href("fr", "services")}>{fr.services}</a>
+      <a href={href("fr", "contact")}>{fr.contact}</a>
+    </p>
+  </article>
+  <article data-nf-lang="en" lang="en">
+    <p class="kicker">{en.kicker}</p>
+    <h1 class="page-title">{en.title}</h1>
+    <p class="lede">{en.text}</p>
+    <p class="next-links">
+      <a href={href("en", "home")}>{en.home}</a>
+      <a href={href("en", "services")}>{en.services}</a>
+      <a href={href("en", "contact")}>{en.contact}</a>
+    </p>
+  </article>
+</Layout>

@@ -1,0 +1,131 @@
+---
+import type { Locale, RouteKey } from "../lib/locale";
+import { joinBase } from "../lib/alternates.mjs";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { dictionary } from "../i18n";
+import { absoluteUrl, href } from "../lib/href";
+import { safeJson } from "../lib/text";
+import "../styles/global.css";
+
+interface Props {
+  locale: Locale;
+  route?: RouteKey;
+  slug?: string;
+  title: string;
+  description: string;
+  noindex?: boolean;
+  notFound?: boolean;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { locale, route, slug, title, description, noindex = false, notFound = false, jsonLd } = Astro.props;
+const locales: Locale[] = notFound ? ["fr", "en"] : [locale];
+const origin = Astro.site ?? "https://mtaqys.github.io";
+const asset = (path: string) => absoluteUrl(joinBase(import.meta.env.BASE_URL || "/", path), origin);
+const frHref = route ? absoluteUrl(href("fr", route, slug), origin) : "";
+const enHref = route ? absoluteUrl(href("en", route, slug), origin) : "";
+const canonical = locale === "en" ? enHref : frHref;
+const ogImage = asset(locale === "en" && !notFound ? "/og-en.png" : "/og-fr.png");
+const t = dictionary[locale];
+---
+
+<!doctype html>
+<html lang={locale} data-title-en={notFound ? dictionary.en.notFound.metaTitle : undefined}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta id="theme-color" name="theme-color" content="#f3f0e8" />
+    <script is:inline>
+      (function () {
+        const key = "dynamogic-theme";
+        let theme = "light";
+        try {
+          const stored = localStorage.getItem(key);
+          if (stored === "dark" || stored === "light") theme = stored;
+          else if (window.matchMedia("(prefers-color-scheme: dark)").matches) theme = "dark";
+        } catch {
+          theme = "light";
+        }
+        const root = document.documentElement;
+        root.setAttribute("data-theme", theme);
+        root.style.colorScheme = theme;
+        const meta = document.getElementById("theme-color");
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#141311" : "#f3f0e8");
+      })();
+    </script>
+    {
+      notFound && (
+        <script is:inline>
+          (function () {
+            const path = location.pathname || "/";
+            const english = /(^|\/)en(\/|$)/.test(path);
+            const root = document.documentElement;
+            root.lang = english ? "en" : "fr";
+            root.setAttribute("data-nf", english ? "en" : "fr");
+            if (english) {
+              const title = root.getAttribute("data-title-en");
+              if (title) document.title = title;
+            }
+          })();
+        </script>
+      )
+    }
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {
+      route && (
+        <>
+          <link rel="alternate" hreflang="fr" href={frHref} />
+          <link rel="alternate" hreflang="en" href={enHref} />
+          <link rel="alternate" hreflang="x-default" href={frHref} />
+        </>
+      )
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Dynamogic" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={t.meta.ogAlt} />
+    <meta property="og:locale" content={locale === "fr" ? "fr_FR" : "en_US"} />
+    <meta property="og:locale:alternate" content={locale === "fr" ? "en_US" : "fr_FR"} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" href={asset("/favicon.svg")} type="image/svg+xml" />
+    <link rel="icon" href={asset("/favicon-32.png")} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={asset("/apple-touch-icon.png")} />
+    {jsonLd && <script type="application/ld+json" set:html={safeJson(jsonLd)} />}
+  </head>
+  <body>
+    {
+        locales.map((item) => (
+          <a class="skip" href="#content" data-nf-lang={notFound ? item : undefined}>
+            {dictionary[item].nav.skip}
+          </a>
+        ))
+      }
+    <header class="site-header">
+      {locales.map((item) => <Header locale={item} route={route} slug={slug} tagged={notFound} />)}
+    </header>
+    <main id="content" class="page" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      {locales.map((item) => <Footer locale={item} route={route} tagged={notFound} />)}
+    </footer>
+    <script>
+      import { initNav } from "../scripts/nav";
+      import { initTheme } from "../scripts/theme";
+      initTheme();
+      initNav();
+    </script>
+  </body>
+</html>
