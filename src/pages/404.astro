@@ -1,0 +1,79 @@
+---
+import "../styles/global.css";
+import Arrow from "../components/Arrow.astro";
+import Lockup from "../components/Lockup.astro";
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <script is:inline src="/theme.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page introuvable — Dynamogic</title>
+    <meta
+      name="description"
+      content="Cette adresse ne correspond à aucune page du site Dynamogic."
+    />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0E0F11" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon-180.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+  <body>
+    <a class="skip" href="#contenu">Aller au contenu</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="/">
+          <Lockup />
+        </a>
+        <div class="header-end">
+          <nav class="lang-switch" aria-label="Langue">
+            <a href="/" hreflang="fr" lang="fr">FR</a>
+            <span class="lang-slash" aria-hidden="true">/</span>
+            <a href="/en/" hreflang="en" lang="en">EN</a>
+          </nav>
+          <button
+            type="button"
+            class="theme-toggle"
+            data-theme-toggle
+            data-label-light="Clair"
+            data-label-dark="Sombre"
+            data-aria-when-dark="Thème sombre. Passer au thème clair."
+            data-aria-when-light="Thème clair. Passer au thème sombre."
+            aria-label="Thème sombre. Passer au thème clair."
+          >
+            <span class="theme-dot" aria-hidden="true"></span>
+            <span data-theme-label>Clair</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main id="contenu" class="not-found">
+      <div class="wrap">
+        <div class="lang-block" lang="fr">
+          <p class="eyebrow">404</p>
+          <h1 class="display">Cette page n’existe pas.</h1>
+          <p class="lede">
+            L’adresse est peut-être inexacte, ou la page a été déplacée. Le site, lui, est toujours là.
+          </p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/">Retour à l’accueil<Arrow /></a>
+            <a class="btn btn-secondary" href="/contact/">Écrire</a>
+          </div>
+        </div>
+        <div class="lang-block" lang="en">
+          <p class="eyebrow">404</p>
+          <h2 class="display">This page does not exist.</h2>
+          <p class="lede">The address may be wrong, or the page may have moved. The site is still here.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="/en/">Back to the English home<Arrow /></a>
+            <a class="btn btn-secondary" href="/en/contact/">Write to us</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

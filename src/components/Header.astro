@@ -1,0 +1,86 @@
+---
+import Lockup from "./Lockup.astro";
+import type { Dictionary } from "../i18n/types";
+import { pathFor, type PageId } from "../lib/routes";
+
+interface Props {
+  t: Dictionary;
+  page: PageId;
+}
+
+const { t, page } = Astro.props;
+const lang = t.lang;
+---
+
+<a class="skip" href="#contenu">{t.skip}</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href={pathFor("home", lang)}>
+      <Lockup />
+    </a>
+    <nav class="nav-desktop" aria-label={t.navAria}>
+      {
+        t.nav.map((item) => (
+          <a href={pathFor(item.page, lang)} aria-current={item.page === page ? "page" : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="header-end">
+      <nav class="lang-switch" aria-label={t.langAria}>
+        {
+          lang === "fr" ? (
+            <span lang="fr" aria-current="true">
+              FR
+            </span>
+          ) : (
+            <a href={pathFor(page, "fr")} hreflang="fr" lang="fr">
+              FR
+            </a>
+          )
+        }
+        <span class="lang-slash" aria-hidden="true">/</span>
+        {
+          lang === "en" ? (
+            <span lang="en" aria-current="true">
+              EN
+            </span>
+          ) : (
+            <a href={pathFor(page, "en")} hreflang="en" lang="en">
+              EN
+            </a>
+          )
+        }
+      </nav>
+      <button
+        type="button"
+        class="theme-toggle"
+        data-theme-toggle
+        data-label-light={t.themeLight}
+        data-label-dark={t.themeDark}
+        data-aria-when-dark={t.themeAriaToLight}
+        data-aria-when-light={t.themeAriaToDark}
+        aria-label={t.themeAriaToLight}
+      >
+        <span class="theme-dot" aria-hidden="true"></span>
+        <span data-theme-label>{t.themeLight}</span>
+      </button>
+      <details class="nav-mobile">
+        <summary>
+          <span class="when-closed">{t.menuOpen}</span>
+          <span class="when-open">{t.menuClose}</span>
+        </summary>
+        <nav aria-label={t.navAria}>
+          {
+            t.nav.map((item) => (
+              <a href={pathFor(item.page, lang)} aria-current={item.page === page ? "page" : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>

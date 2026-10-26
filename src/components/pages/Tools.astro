@@ -1,0 +1,45 @@
+---
+import Base from "../../layouts/Base.astro";
+import Arrow from "../Arrow.astro";
+import Display from "../Display.astro";
+import type { Dictionary } from "../../i18n/types";
+
+interface Props {
+  t: Dictionary;
+}
+
+const { t } = Astro.props;
+const c = t.tools;
+---
+
+<Base t={t} page="tools" title={c.metaTitle} description={c.metaDescription}>
+  <section class="page-hero">
+    <div class="wrap narrow-head">
+      <p class="eyebrow">{c.kicker}</p>
+      <Display text={c.title} />
+      <p class="lede">{c.lede}</p>
+    </div>
+  </section>
+
+  <section class="section section-tight" aria-label={c.kicker}>
+    <div class="wrap">
+      <div class="tool-grid">
+        {
+          c.items.map((item) => (
+            <a class="tool-card" href={item.href}>
+              <p class="kicker">{item.index}</p>
+              <h2>{item.name}</h2>
+              <p class="tool-summary">{item.summary}</p>
+              <p>{item.detail}</p>
+              <span class="tool-action">
+                {item.action}
+                <Arrow />
+              </span>
+            </a>
+          ))
+        }
+      </div>
+      <p class="note">{c.note}</p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,52 @@
+---
+import Lockup from "./Lockup.astro";
+import type { Dictionary } from "../i18n/types";
+import { pathFor } from "../lib/routes";
+
+interface Props {
+  t: Dictionary;
+}
+
+const { t } = Astro.props;
+const lang = t.lang;
+const email = "contact@dynamogic.com";
+---
+
+<footer class="site-footer" aria-label={t.footerAria}>
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href={pathFor("home", lang)}>
+        <Lockup />
+      </a>
+      <p>{t.footerBlurb}</p>
+    </div>
+    <nav aria-label={t.navAria}>
+      <ul>
+        {
+          t.nav.map((item) => (
+            <li>
+              <a href={pathFor(item.page, lang)}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <nav aria-label={t.legalNav.map((item) => item.label).join(", ")}>
+      <ul>
+        {
+          t.legalNav.map((item) => (
+            <li>
+              <a href={pathFor(item.page, lang)}>{item.label}</a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={`mailto:${email}`}>{email}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="wrap footer-base">
+    <p>{t.footerRights}</p>
+  </div>
+</footer>

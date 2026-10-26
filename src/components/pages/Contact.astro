@@ -1,0 +1,74 @@
+---
+import Base from "../../layouts/Base.astro";
+import Arrow from "../Arrow.astro";
+import Display from "../Display.astro";
+import type { Dictionary } from "../../i18n/types";
+
+interface Props {
+  t: Dictionary;
+}
+
+const { t } = Astro.props;
+const c = t.contact;
+const email = "contact@dynamogic.com";
+---
+
+<Base t={t} page="contact" title={c.metaTitle} description={c.metaDescription}>
+  <section class="page-hero">
+    <div class="wrap contact-grid">
+      <div>
+        <p class="eyebrow">{c.kicker}</p>
+        <Display text={c.title} />
+        <p class="lede">{c.lede}</p>
+        <p class="email-display">
+          <span class="kicker">{t.emailLabel}</span>
+          <a href={`mailto:${email}`}>{email}</a>
+        </p>
+        <ul class="point-list">
+          {c.points.map((point) => <li>{point}</li>)}
+        </ul>
+      </div>
+
+      <form
+        class="form"
+        action={`mailto:${email}?subject=Dynamogic`}
+        method="post"
+        enctype="text/plain"
+        aria-labelledby="form-title"
+      >
+        <h2 id="form-title">{c.formTitle}</h2>
+        <p class="form-note">{c.formNote}</p>
+        <div class="form-row">
+          <div class="field">
+            <label for="name">
+              {c.name} <span>({c.optional})</span>
+            </label>
+            <input id="name" name="name" type="text" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="email">
+              {c.email} <span>({c.optional})</span>
+            </label>
+            <input id="email" name="email" type="email" autocomplete="email" inputmode="email" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="subject">
+            {c.subject} <span>({c.required})</span>
+          </label>
+          <input id="subject" name="subject" type="text" required autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="message">
+            {c.message} <span>({c.required})</span>
+          </label>
+          <textarea id="message" name="message" required rows="7"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">{c.submit}<Arrow /></button>
+        <p class="form-fallback">
+          <a href={`mailto:${email}`}>{c.direct}</a>
+        </p>
+      </form>
+    </div>
+  </section>
+</Base>
