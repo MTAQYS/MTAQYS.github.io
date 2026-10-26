@@ -1,0 +1,45 @@
+---
+import Base from "../../layouts/Base.astro";
+import type { Dictionary, ProseSection } from "../../i18n/types";
+import type { PageId } from "../../lib/routes";
+
+interface Props {
+  t: Dictionary;
+  page: Extract<PageId, "legal" | "privacy">;
+  copy: {
+    metaTitle: string;
+    metaDescription: string;
+    kicker: string;
+    title: string;
+    lede: string;
+    updated: string;
+    sections: ProseSection[];
+  };
+}
+
+const { t, page, copy } = Astro.props;
+const placeholderComment =
+  "LEGAL-PLACEHOLDER: add the real legal form, registered office, registration number, share capital, VAT number, publication director, or host log-retention period in this section. Do not invent them.";
+---
+
+<Base t={t} page={page} title={copy.metaTitle} description={copy.metaDescription}>
+  <article class="page-hero">
+    <div class="wrap prose">
+      <p class="eyebrow">{copy.kicker}</p>
+      <h1>{copy.title}</h1>
+      <p class="lede">{copy.lede}</p>
+      <p class="updated">{copy.updated}</p>
+      {
+        copy.sections.map((section) => (
+          <section id={section.id} class:list={[{ "legal-gap": section.placeholder }]}>
+            {section.placeholder && <Fragment set:html={`<!-- ${placeholderComment} -->`} />}
+            <h2>{section.heading}</h2>
+            {section.paragraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </section>
+        ))
+      }
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,105 @@
+---
+import Base from "../../layouts/Base.astro";
+import Arrow from "../Arrow.astro";
+import Display from "../Display.astro";
+import type { Dictionary } from "../../i18n/types";
+import { pathFor } from "../../lib/routes";
+
+interface Props {
+  t: Dictionary;
+}
+
+const { t } = Astro.props;
+const c = t.services;
+const lang = t.lang;
+---
+
+<Base t={t} page="services" title={c.metaTitle} description={c.metaDescription}>
+  <section class="page-hero">
+    <div class="wrap narrow-head">
+      <p class="eyebrow">{c.kicker}</p>
+      <Display text={c.title} />
+      <p class="lede">{c.lede}</p>
+    </div>
+  </section>
+
+  <div class="wrap expertise">
+    <nav class="section-index" aria-label={c.indexLabel}>
+      <p class="kicker">{c.indexLabel}</p>
+      <ul>
+        {
+          c.blocks.map((block) => (
+            <li>
+              <a href={`#${block.id}`}>
+                <span>{block.index}</span>
+                {block.title}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href="#frame">
+            <span>04</span>
+            {c.frameTitle}
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="expertise-body">
+      {
+        c.blocks.map((block) => (
+          <section id={block.id} class="service-block" aria-labelledby={`${block.id}-title`}>
+            <p class="kicker">{block.index}</p>
+            <h2 id={`${block.id}-title`}>{block.title}</h2>
+            {block.paragraphs.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+            <ul class="point-list">
+              {block.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+
+      <section id="frame" class="service-block" aria-labelledby="frame-title">
+        <p class="kicker">04</p>
+        <h2 id="frame-title">{c.frameTitle}</h2>
+        <p>{c.frameLede}</p>
+        <ol class="steps steps-compact">
+          {
+            c.frame.map((item) => (
+              <li>
+                <span>{item.index}</span>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <section id="limits" class="service-block" aria-labelledby="limits-title">
+        <h2 id="limits-title">{c.limitsTitle}</h2>
+        <ul class="point-list">
+          {c.limits.map((item) => <li>{item}</li>)}
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <section class="section cta-section" aria-labelledby="services-cta">
+    <div class="wrap cta-panel">
+      <div>
+        <h2 id="services-cta">{c.ctaTitle}</h2>
+        <p class="lede">{c.ctaText}</p>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" href={`mailto:${c.ctaButton}`}>{c.ctaButton}<Arrow /></a>
+        <a class="btn btn-secondary" href={pathFor("contact", lang)}>{t.nav.find((item) => item.page === "contact")?.label}</a>
+      </div>
+    </div>
+  </section>
+</Base>

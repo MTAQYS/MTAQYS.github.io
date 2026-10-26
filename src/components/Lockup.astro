@@ -1,0 +1,12 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<span class:list={["lockup", className]}>
+  <img class="lockup-dark" src="/brand/lockup-horizontal-dark.svg" alt="Dynamogic" />
+  <img class="lockup-light" src="/brand/lockup-horizontal-light.svg" alt="Dynamogic" />
+</span>

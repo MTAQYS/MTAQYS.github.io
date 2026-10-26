@@ -1,0 +1,124 @@
+---
+import Base from "../../layouts/Base.astro";
+import Arrow from "../Arrow.astro";
+import Display from "../Display.astro";
+import Mark from "../Mark.astro";
+import type { Dictionary } from "../../i18n/types";
+import { pathFor } from "../../lib/routes";
+
+interface Props {
+  t: Dictionary;
+}
+
+const { t } = Astro.props;
+const c = t.home;
+const lang = t.lang;
+---
+
+<Base t={t} page="home" title={c.metaTitle} description={c.metaDescription}>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="rise">
+        <p class="eyebrow">{c.kicker}</p>
+        <Display text={c.title} />
+        <p class="lede">{c.lede}</p>
+        <div class="actions">
+          <a class="btn btn-primary" href={pathFor("contact", lang)}>{c.primaryCta}<Arrow /></a>
+          <a class="btn btn-secondary" href={pathFor("services", lang)}>{c.secondaryCta}</a>
+        </div>
+      </div>
+      <aside class="mark-panel rise-late">
+        <Mark />
+        <p class="mark-caption">{c.markCaption}</p>
+      </aside>
+    </div>
+    <div class="wrap">
+      <div class="hero-foot">
+        {
+          c.practices.map((item) => (
+            <article>
+              <span>{item.index}</span>
+              <h2>{item.title}</h2>
+              <p>{item.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="what-title">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="kicker">01 — 03</p>
+        <h2 id="what-title">{c.whatTitle}</h2>
+        <p class="lede">{c.whatLede}</p>
+      </header>
+      <div class="card-grid">
+        {
+          c.what.map((item) => (
+            <article class="info-card">
+              <p class="kicker">{item.index}</p>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))
+        }
+      </div>
+      <p class="after-grid">
+        <a href={pathFor("tools", lang)}>{c.toolsLink}</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-muted" aria-labelledby="how-title">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="kicker">01 — 03</p>
+        <h2 id="how-title">{c.howTitle}</h2>
+        <p class="lede">{c.howLede}</p>
+      </header>
+      <ol class="steps">
+        {
+          c.how.map((item) => (
+            <li>
+              <span>{item.index}</span>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="name-title">
+    <div class="wrap">
+      <header class="section-head">
+        <p class="kicker kicker-invert">{c.kicker}</p>
+        <h2 id="name-title">{c.nameTitle}</h2>
+        <p class="lede lede-invert">{c.nameLede}</p>
+      </header>
+      <div class="name-grid">
+        {
+          c.nameParts.map((part) => (
+            <article>
+              <h3>{part.word}</h3>
+              <p>{part.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section" aria-labelledby="cta-title">
+    <div class="wrap cta-panel">
+      <div>
+        <h2 id="cta-title">{c.ctaTitle}</h2>
+        <p class="lede">{c.ctaText}</p>
+      </div>
+      <a class="btn btn-primary" href="mailto:contact@dynamogic.com">{c.ctaButton}<Arrow /></a>
+    </div>
+  </section>
+</Base>

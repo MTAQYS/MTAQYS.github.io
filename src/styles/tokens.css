@@ -1,0 +1,74 @@
+/* Dynamogic — design tokens v1
+   Dark is the default theme; light via [data-theme="light"]. */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  /* Neutral foundation */
+  --dg-bg:              #0E0F11;
+  --dg-surface:         #16181B;
+  --dg-surface-raised:  #1C1E22;
+  --dg-border:          #26292E;
+  --dg-border-strong:   #3A3E44;
+  /* Text tiers */
+  --dg-text-primary:    #ECEAE5;
+  --dg-text-secondary:  #A9A59E;
+  --dg-text-tertiary:   #85817A;
+  /* Accent — Copper */
+  --dg-accent:          #D4925F;
+  --dg-accent-hover:    #E2A877;
+  --dg-accent-subtle:   #2B1F17;
+  --dg-on-accent:       #0E0F11;
+  --dg-focus-ring:      rgba(212, 146, 95, 0.45);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --dg-bg:              #F5F3EE;
+  --dg-surface:         #FBFAF7;
+  --dg-surface-raised:  #EFECE6;
+  --dg-border:          #E2DED5;
+  --dg-border-strong:   #CBC6BB;
+  --dg-text-primary:    #16171A;
+  --dg-text-secondary:  #55524C;
+  --dg-text-tertiary:   #6F6B64;
+  --dg-accent:          #9C5428;
+  --dg-accent-hover:    #83441D;
+  --dg-accent-subtle:   #F1E6DC;
+  --dg-on-accent:       #FBFAF7;
+  --dg-focus-ring:      rgba(156, 84, 40, 0.35);
+}
+
+:root {
+  /* Typography */
+  --dg-font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --dg-font-text:    "Geist", "Helvetica Neue", Arial, sans-serif;
+  --dg-font-mono:    "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Type scale — size / line-height / tracking */
+  --dg-fs-display:   88px;  --dg-lh-display: 1.00; --dg-tr-display: -0.02em;
+  --dg-fs-h1:        56px;  --dg-lh-h1:      1.05; --dg-tr-h1:      -0.015em;
+  --dg-fs-h2:        36px;  --dg-lh-h2:      1.15; --dg-tr-h2:      -0.01em;
+  --dg-fs-h3:        22px;  --dg-lh-h3:      1.30; --dg-tr-h3:      -0.01em;
+  --dg-fs-body-lg:   18px;  --dg-lh-body-lg: 1.60; --dg-tr-body-lg: -0.005em;
+  --dg-fs-body:      15px;  --dg-lh-body:    1.60; --dg-tr-body:    0;
+  --dg-fs-small:     13px;  --dg-lh-small:   1.50; --dg-tr-small:   0.005em;
+  --dg-fs-label:     11px;  --dg-lh-label:   1.40; --dg-tr-label:   0.12em;
+
+  /* Spacing — 4px base */
+  --dg-space-1: 4px;   --dg-space-2: 8px;   --dg-space-3: 12px;
+  --dg-space-4: 16px;  --dg-space-5: 24px;  --dg-space-6: 32px;
+  --dg-space-7: 48px;  --dg-space-8: 64px;  --dg-space-9: 96px;
+  --dg-space-10: 128px;
+
+  /* Radius — precise, barely softened */
+  --dg-radius-xs: 2px;
+  --dg-radius-sm: 4px;
+  --dg-radius-md: 8px;
+  --dg-radius-lg: 14px;
+  --dg-radius-full: 999px;
+
+  /* Lines & motion */
+  --dg-hairline: 1px;
+  --dg-ease: cubic-bezier(0.2, 0, 0, 1);
+  --dg-duration: 180ms;
+}
